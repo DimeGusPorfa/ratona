@@ -1,0 +1,156 @@
+/* --- ESTILOS GENERALES --- */
+
+/* Cursor de corazón personalizado para toda la página */
+body {
+    cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="%23f43f5e" stroke="%23e11d48" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg>') 16 16, auto;
+    background-color: #fdf2f8;
+    /* Color de fondo rosa muy claro */
+
+    /* Gradientes radiales para darle un toque suave e iluminado al fondo */
+    background-image: radial-gradient(circle at top right, #fce7f3, transparent 40%),
+        radial-gradient(circle at bottom left, #ffe4e6, transparent 40%);
+    margin: 0;
+    min-height: 100vh;
+}
+
+/* Asegurar que las imágenes no se puedan arrastrar por error (arruina el click) */
+img {
+    user-drag: none;
+    -webkit-user-drag: none;
+}
+
+/* --- ANIMACIONES DE CORAZONES DE FONDO --- */
+
+/* Animación de flotar hacia arriba */
+@keyframes floatUp {
+    0% {
+        transform: translateY(100vh) scale(0.5) rotate(0deg);
+        opacity: 0;
+    }
+
+    10% {
+        opacity: var(--target-opacity);
+    }
+
+    90% {
+        opacity: var(--target-opacity);
+    }
+
+    100% {
+        transform: translateY(-20vh) scale(1.5) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* Clase aplicada a los corazones creados en script.js */
+.floating-heart {
+    position: absolute;
+    bottom: -20px;
+    animation: floatUp linear infinite;
+    color: #f43f5e;
+    /* Color rosa fuerte */
+    pointer-events: none;
+    /* Permite que los clicks pasen a través de los corazones */
+}
+
+/* Animación de latido para el mini-corazón del botón "Siguiente" */
+@keyframes pulseHeart {
+
+    0%,
+    100% {
+        transform: scale(1);
+    }
+
+    50% {
+        transform: scale(1.2);
+    }
+}
+
+.animate-pulse-heart {
+    animation: pulseHeart 2s infinite;
+}
+
+/* --- ESTILOS DE LAS CARTAS (FOTOS) --- */
+
+/* Estilo base para cada fotografía */
+.foto-card {
+    position: absolute;
+    inset: 0;
+    border-radius: 1.5rem;
+    /* Bordes muy redondeados */
+    background-color: white;
+    box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+    border: 1px solid #fdf2f8;
+    overflow: hidden;
+    transition: all 400ms ease-in-out;
+    /* Transición suave al moverse */
+    transform-origin: center;
+}
+
+/* Efecto hover (al pasar el ratón) solo activo para la carta que está hasta arriba */
+.foto-card.top-card:hover {
+    transform: translateY(-12px) rotate(1deg) scale(1) !important;
+    /* Levantar un poco la foto */
+    box-shadow: 0 25px 50px -12px rgba(251, 207, 232, 0.5);
+    /* Sombra rosada */
+}
+
+/* Animación "Tinder" cuando se le da click a la foto para enviarla atrás (Derecha) */
+.foto-card.animating-out-right {
+    transform: translate(150%, -10%) rotate(25deg) !important;
+    opacity: 0 !important;
+}
+
+/* Animación "Tinder" hacia la izquierda */
+.foto-card.animating-out-left {
+    transform: translate(-150%, -10%) rotate(-25deg) !important;
+    opacity: 0 !important;
+}
+
+/* --- ANIMACIÓN DE EXPLOSIÓN DE CORAZONES (AL HACER CLICK) --- */
+@keyframes heartBurst {
+    0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(calc(-50% + var(--tx)), calc(-50% + var(--ty))) scale(1.5) rotate(var(--rot));
+        opacity: 0;
+    }
+}
+
+.burst-heart {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    color: #f43f5e;
+    pointer-events: none;
+    animation: heartBurst 600ms ease-out forwards;
+    z-index: 100; /* Asegurar que salgan por encima de las cartas */
+}
+
+/* Botón flotante de "Siguiente" que aparece dentro de la carta */
+.btn-siguiente {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    background-color: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(12px);
+    /* Efecto vidrio (glassmorphism) */
+    padding: 0.375rem 0.75rem;
+    border-radius: 9999px;
+    color: #be185d;
+    font-size: 0.75rem;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    opacity: 0;
+    /* Oculto por defecto */
+    transition: opacity 300ms;
+}
+
+/* Mostrar el botón de "Siguiente" solo al pasar el ratón por la carta superior */
+.foto-card.top-card:hover .btn-siguiente {
+    opacity: 1;
+}
